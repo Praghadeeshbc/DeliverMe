@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>DeliverMe</title>
+ 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="DeliverMe">
+ 
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/dash_style.css" type="text/css" media="all">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" media="all">
+ 
+	<link href="//fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Mukta:200,300,400,500,600,700,800" rel="stylesheet">
+	       
+    </head>
+<body>
+
+    <section class="main">
+    
+        <div class="layer">
+          
+          <div class="bottom-grid">
+            <div class="logo">
+                <h1> <a href="/"><span class="fa fa-key"></span> DeliverMe</a></h1>
+                     
+                  </div>
+                  <div class="links">
+              <ul class="links-unordered-list">
+                <li class="active">
+                  <a href="/users/logout"  class="">Logout</a>
+                </li>   <li class=""></li>
+                  
+                <li class="">
+                  <a href=" /users/chat_helpseeker" class="">Chat</a>
+                </li>
+                <li class="">
+                  <a href="/users/current_request" class="">Requests</a>
+                </li>
+              </ul>
+            </div></div>
+            
+
+              <div class="content-w3ls">
+                <div class="text-center icon">
+                    <span></span>
+                </div>
+
+
+<form action="/users/request_buy" method="POST" enctype="multipart/form-data">
+         
+<div class="field-group">
+ <span class="fa fa-user" aria-hidden="true"></span>
+<div class="wthree-field">
+                          
+<input type="text" class="form-control" name='pname' placeholder="Product name" required value="">
+                    
+  </div></div>
+                        <div class="field-group">
+                            <span class="fa fa-user" aria-hidden="true"></span>
+                            <div class="wthree-field">
+                            
+                                <input type="number" class="form-control" name='pprice' placeholder="Product's expected price" required
+                                value="">
+                            </div>
+                        </div>
+                
+                
+                    
+                        <div class="field-group">
+                            <span class="fa fa-user" aria-hidden="true"></span>
+                            <div class="wthree-field">
+                                <textarea class="form-control" name="pdesc" id="" rows="3"  placeholder="Tell Us more about your products" 
+                                required></textarea>
+                            </div>
+                        </div>
+                
+                        <div class="field-group">
+                            <span class="fa fa-user" aria-hidden="true"></span>
+                            <div class="wthree-field">
+                                <input class="form-control" type="file" name="file" 
+                            >
+                            </div>
+                        </div>
+                
+                
+                        <div class="field-group">
+                            <span class="fa fa-user" aria-hidden="true"></span>
+                            <div class="wthree-field">
+                                <input type="number" class="form-control" name='rprice' placeholder="Reward Price for the buyers" required
+                                value="">
+                            </div>
+                        </div>
+                    
+        <div class="field-group">
+            <span class="fa fa-user" aria-hidden="true"></span>
+            <div class="wthree-field">
+                 <input type="text" class="form-control" name='address1' placeholder="Address of Delivery" required
+                value="Anna University, Chennai" required>
+           
+        </div>
+        </div>
+       <center> <button type="button" class="btn btn-primary" name="adrbtn1" id="ab1">search</button>
+       </center>
+
+        <div class="form group m-4">
+
+            <div class="container d-flex p-3">
+                <div id="map" style="height: 30rem ;width:100%; align-content: center;" class="m-4"></div>
+            </div>
+            <button class="btn btn-success" id='location_btn' type="button">My Location</button><br>
+            <input type="hidden" id="lat1" name="lat1" value="3487">
+            <input type="hidden" id="lng1" name="lng1" value="3487">
+        </div>
+
+
+        <div class="field-group">
+            <span class="fa fa-user" aria-hidden="true"></span>
+            <div class="wthree-field">
+            <input type="text" class="form-control" name='address2' placeholder="Address of Shop" required
+                value="T nagar, Chennai" required>
+            </div>
+        </div>
+       <center> <button type="button" class="btn btn-primary" name="adrbtn2" id="ab2">search</button>
+       </center>
+    
+     
+
+        
+        <div class="form group m-4">
+            <div class="container d-flex m-4">
+                <div id="map2" style="height: 30rem ;width:100%; align-content: center;"></div>
+            </div>
+
+            <input type="hidden" id="lat2" name="lat2" value="13.0827">
+            <input type="hidden" id="lng2" name="lng2" value="80.2707">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+    </form>
+</div></div></section>
+
+    <script>
+
+        var map, infoWindow;
+        var map2;
+        const location_btn = document.getElementById('location_btn');
+
+        const address2 = document.getElementsByName('address2')[0].value;
+
+
+        // axios.get("https://us1.locationiq.com/v1/search.php?key=pk.0bf965d65073f07c4b1a12bb24df5706&q=" + address1 + "&limit=2&accept-language=India&countrycodes=India&format=json").then(function (res) { console.log(res.data[0]); })
+        function initMap() {
+
+
+            var reqpos;
+            var reqpos2;
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 13.0109, lng: 80.2354 },
+                zoom: 15
+            });
+            map2 = new google.maps.Map(document.getElementById('map2'), {
+                center: { lat: 13.0827, lng: 80.2707 },
+                zoom: 15
+            });
+
+            document.getElementById('ab1').addEventListener('click', () => {
+                var address1 = document.getElementsByName('address1')[0].value;
+                axios.get("https://us1.locationiq.com/v1/search.php?key=pk.0bf965d65073f07c4b1a12bb24df5706&q=" + address1 + "&limit=2&accept-language=India&countrycodes=India&format=json").then(function (res) {
+                    console.log(res.data[0]);
+                    console.log(parseFloat(res.data[0].lat));
+                    var pos = {
+                        lat: parseFloat(res.data[0].lat),
+                        lng: parseFloat(res.data[0].lon)
+                    };
+                    map.setCenter(pos);
+                    addmarker({ coords: pos });
+                    document.getElementById('lat1').value = pos.lat;
+                    document.getElementById('lng1').value = pos.lng;
+                })
+
+            })
+
+            document.getElementById('ab2').addEventListener('click', () => {
+                var address2 = document.getElementsByName('address2')[0].value;
+                axios.get("https://us1.locationiq.com/v1/search.php?key=pk.0bf965d65073f07c4b1a12bb24df5706&q=" + address2 + "&limit=2&accept-language=India&countrycodes=India&format=json").then(function (res) {
+                    console.log(res.data[0]);
+                    console.log(parseFloat(res.data[0].lat));
+                    var pos = {
+                        lat: parseFloat(res.data[0].lat),
+                        lng: parseFloat(res.data[0].lon)
+                    };
+                    map2.setCenter(pos);
+                    addmarker2({ coords: pos });
+                    document.getElementById('lat2').value = pos.lat;
+                    document.getElementById('lng2').value = pos.lng;
+                })
+
+            })
+
+            const geocoder = new google.maps.Geocoder();
+            var marker = new google.maps.Marker({ position: { lat: 13.0827, lng: 80.2707 }, map: map });
+            var marker2 = new google.maps.Marker({ position: { lat: 13.0827, lng: 80.2707 }, map: map2 });
+            infoWindow = new google.maps.InfoWindow;
+
+            // Try HTML5 geolocation.
+            function getlocation() {
+                marker.setMap(null);
+                if (navigator.geolocation) {
+
+                    navigator.geolocation.getCurrentPosition(function (position) {
+
+                        var pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        marker = new google.maps.Marker({ position: pos, map: map })
+                        reqpos = pos;
+                        document.getElementById('lat1').value = (pos.lat);
+                        document.getElementById('lng1').value = (pos.lng);
+
+                        map.setCenter(pos);
+                        map.setZoom(15);
+                    }, function () {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    });
+                } else {
+                    // Browser doesn't support Geolocation
+                    handleLocationError(false, infoWindow, map.getCenter());
+                }
+            }
+            getlocation();
+            location_btn.addEventListener('click', function (event) {
+                getlocation();
+            })
+            function addmarker(props) {
+                marker.setMap(null);
+                marker = new google.maps.Marker({
+                    position: props.coords,
+                    map: map
+                })
+            }
+            function addmarker2(props) {
+                marker2.setMap(null);
+                marker2 = new google.maps.Marker({
+                    position: props.coords,
+                    map: map2
+                })
+            }
+
+
+
+            google.maps.event.addListener(map, 'click', function (event) {
+
+                addmarker({ coords: event.latLng });
+                var temp = event.latLng;
+                reqpos = {
+                    lat: temp.lat(),
+                    lng: temp.lng()
+                }
+                document.getElementById('lat1').value = reqpos.lat;
+                document.getElementById('lng1').value = reqpos.lng;
+                //geocodelatlng(geocoder, reqpos);
+
+
+
+            })
+            google.maps.event.addListener(map2, 'click', function (event) {
+
+                addmarker2({ coords: event.latLng });
+                var temp = event.latLng;
+                reqpos2 = {
+                    lat: temp.lat(),
+                    lng: temp.lng()
+                }
+                document.getElementById('lat2').value = reqpos2.lat;
+                document.getElementById('lng2').value = reqpos2.lng;
+                //geocodelatlng(geocoder, reqpos);
+
+
+
+            });
+
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.');
+                infoWindow.open(map);
+            }
+            //requires billing info
+            // geocodelatlng(geocoder, reqpos);
+            function geocodelatlng(geocoder, reqpos) {
+                geocoder.geocode({ location: reqpos }, (results, status) => {
+                    if (status === "OK") {
+                        if (results[0]) {
+                            $('#address').text(results[0].formatted_address);
+                        }
+                        else {
+                            window.alert("no result found");
+                        }
+                    }
+                    else {
+                        window.alert("geocoder failed to " + status);
+                    }
+                })
+            }
+
+        }
+    </script>
+
+
+    <script defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-tnhh2AhTi_KtnD5vYsGivalaCszlpVY&callback=initMap">
+        </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

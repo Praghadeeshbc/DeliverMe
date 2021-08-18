@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>DeliverMe</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/dash_style_helper.css" type="text/css" media="all">
+
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" media="all">
+ 
+	<link href="//fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Mukta:200,300,400,500,600,700,800" rel="stylesheet">
+   
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script>
+        (function (t, a, l, k, j, s) {
+            s = a.createElement('script'); s.async = 1; s.src = "https://cdn.talkjs.com/talk.js"; a.head.appendChild(s)
+                ; k = t.Promise; t.Talk = {
+                    v: 3, ready: {
+                        then: function (f) {
+                            if (k) return new k(function (r, e) { l.push([f, r, e]) }); l
+                                .push([f])
+                        }, catch: function () { return k && new k() }, c: l
+                    }
+                };
+        })(window, document, []);</script>
+</head>
+
+<body>
+  <section class="main">
+    
+  <div class="layer">
+    
+    <div class="bottom-grid">
+    
+            <div class="logo">
+              <h1> <a href="/"><span class="fa fa-key"></span> DeliverMe</a></h1>
+           <p class="sansserif">Welcome <%= user.user_name %></p>
+          </div>
+
+            <div class="links">
+              
+        <ul class="links-unordered-list">
+          <li class="active">
+            <a href="/users/logout"  class="">Logout</a>
+          </li>
+          <li class="">
+            
+          </li>
+          <li class="">
+            
+            <a href="#" onclick="return confirm('are you sure')">Chat</a>
+          </li>
+          <li class="">
+          
+            <a href="#" >Requests</a>
+
+          </li>
+        </ul>
+        
+      </div></div> 
+
+    <% if(typeof errors != 'undefined') { %>
+    <% errors.forEach(function(error) { %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= error.msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+
+    <% }); %>
+
+    <% } %>
+
+    <% if(success_msg !=''){ %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= success_msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <% } %>
+
+    <% if(error_msg !=''){ %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= error_msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <% } %>
+
+
+    <% if(error !=''){ %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <% } %>
+
+    <input type="hidden" id="otheruser" value=<%=other_user%>>
+    <div id="talkjs-container" style="width: 90%; margin: 30px; height: 500px">
+        <i>Loading chat...</i>
+    </div>
+  </div></section>
+
+
+
+    <script>
+        var o = document.getElementById('otheruser').value;
+
+        var otheruser;
+        if (o.length > 1) {
+            console.log(JSON.parse(o));
+            otheruser = JSON.parse(o);
+        }
+
+        // console.log(JSON.parse(otheruser));
+        Talk.ready.then(function () {
+            var me = new Talk.User({
+                id: "<%=user.mobile_no%>",
+                name: "<%=user.user_name%>",
+                email: "<%=user.email%>",
+                welcomeMessage: "Hey I can buy your mentioned product",
+                role: "helper"
+
+            });
+
+            window.talkSession = new Talk.Session({
+                appId: "tRbXLssV",
+                me: me
+            });
+            var conversation, inbox;
+            if (o.length > 2) {
+                console.log("herer");
+                var other = new Talk.User({
+                    id: otheruser.mobile_no,
+                    name: otheruser.user_name,
+                    email: otheruser.email,
+                    welcomeMessage: "hi",
+                    role: "helpseeker"
+
+
+                });
+                var conversation = talkSession.getOrCreateConversation(Talk.oneOnOneId(me, other));
+                conversation.setParticipant(me);
+                conversation.setParticipant(other);
+                var inbox = talkSession.createInbox({ selected: conversation });
+                inbox.mount(document.getElementById("talkjs-container"));
+            }
+            else {
+                var inbox = talkSession.createInbox();
+                inbox.mount(document.getElementById("talkjs-container"));
+            }
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

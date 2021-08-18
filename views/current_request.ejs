@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Deliver Me</title>
+   
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/dash_style.css" type="text/css" media="all">
+
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css" media="all">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <section class="main">
+    
+        <div class="layer">
+            
+            <div class="bottom-grid">
+                <div class="logo">
+                    <h1> <a href="/"><span class="fa fa-key"></span> DeliverMe</a></h1>
+                </div>
+                <div class="links">
+                    <ul class="links-unordered-list">
+                        <li class="active">
+                          <a href="/users/logout"  class="">Logout</a>
+                        </li>
+                        <li class=""></li>
+                        <li class="">
+                          <a href=" /users/chat_helpseeker" class="">Chat</a>
+                        </li>
+                        <li class="">
+                          <a href="/users/request_buy" class="">AskforHelp</a>
+                        </li>
+                      </ul>
+                </div>
+            </div></div>    
+        <%results.forEach( function(item) 
+        {%>
+        <div class="requestlist">
+            <div class="container" >
+                
+                <div class="row" >
+              <div class="col-sm-4"  >
+                 <img  src=" /<%=item.pimage %>"id="currentPhoto" alt=" Card image cap" width="330px"  onerror="this.onerror=null; this.src='/css/no_prof1.png'" alt="" height="240" >
+                </div>
+
+                <div class="col-sm-3" style="background-color: rgb(255,255,255);">
+                    <h5 class="prod_name1">Product Name :<p class="prod_name" > <%= item.pname%></p> </h5>
+                    <h5 class="prod_name1">Product price :  <p class="prod_price"><%= item.pprice%></p></h5> 
+                        
+                </div>        
+                <div class="col-sm-5"  style="background-color: rgb(255, 255, 255);">
+                  
+                    
+                    <p class="prod_name1"> Description: </p><p class="prod_desp"><%= item.pdesc%></p>
+
+
+                <form method="POST" action="/users/add_req"> <input type="hidden" name='id' value=' <%= item.id%>' />
+                    <input type="hidden" name='buyer' value='<%= item.buyer%>' />
+                    <%if(item.accepted){%>
+                    <button id='<%= item.id%>' class="btn btn-success" disabled>accepted</button>
+                    <%}else{%>
+                    <button id='<%= item.id%>' class="btn btn-secondary" disabled>pending</button>
+                    <%}%>
+
+                </form>
+</div>
+            </div>
+        </div></div>
+        <%})%>
+
+            </section>    
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
+</body> 
+
+</html>
